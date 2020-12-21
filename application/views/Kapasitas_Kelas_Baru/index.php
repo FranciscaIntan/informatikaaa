@@ -44,6 +44,8 @@
                                 <td class="text-center">
                                     <a href="<?php echo base_url(); ?>KapasitasKelasBaru/isi/<?= $row['idMakul']; ?>"
                                         class=" badge badge-success text-center"> <i
+
+                                        
                                             class="glyphicon glyphicon-edit"></i>
                                         Detail</a>
                                 </td>
@@ -51,7 +53,7 @@
                             <?php $i++; ?>
                             <?php endforeach; ?>
                         </tbody>
-                    </table>
+                    </table> 
                     <hr>
                                 <a href="<?= base_url('kapasitas/cetakAll/') ?>" class="btn btn-success float-right">
                                     <i class="fas fa-file-excel" aria-hidden="true"></i> CETAK EXCEL</a>
