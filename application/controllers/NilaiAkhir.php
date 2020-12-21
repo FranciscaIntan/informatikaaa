@@ -15,6 +15,8 @@ class nilaiakhir extends CI_Controller {
         $this->load->library('excel');
     }
 
+    
+
     public function index() {
         $data['data'] = $this->list_model->get_kelas_list();
         $data['title'] = 'Daftar Kelas';
