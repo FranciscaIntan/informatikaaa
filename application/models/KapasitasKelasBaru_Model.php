@@ -17,6 +17,13 @@ class KapasitasKelasBaru_Model extends CI_Model {
         return $row->idMakul;
     }
 
+    public function makul() {
+        $this->db->distinct();
+        $this->db->order_by('nama', 'ASC');
+        $this->db->select('nama');
+        $this->db->from('makul');
+        return $this->db->get()->result_array();
+    }
     // public function idDosen($data) {
     //     if ($this->db->get_where('dosen', ['nama' => $data])->num_rows() == 0) {
     //         $this->db->insert('dosen', ['nama' => $data]);

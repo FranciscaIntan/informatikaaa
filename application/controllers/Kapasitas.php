@@ -395,15 +395,15 @@ class kapasitas extends CI_Controller {
         $numrow = 4;
         foreach ($menu as $m) {
             # code...
-            $excel->setActiveSheetIndex(0)->setCellValue('A' . $numrow, $m['nama']);
-            $excel->setActiveSheetIndex(0)->setCellValue('B' . $numrow, $this->kapasitas_model->mhs($angkatan));
-            $excel->setActiveSheetIndex(0)->setCellValue('C' . $numrow, $this->kapasitas_model->ambilMakulAngkatan($data['data'], $m['nama']));
-            $excel->setActiveSheetIndex(0)->setCellValue('D' . $numrow, $this->kapasitas_model->belumAmbilAngkatan($data['data'], $m['nama']));
+            $excel->setActiveSheetIndex(0)->setCellValue('A' . $row, $m['nama']);
+            $excel->setActiveSheetIndex(0)->setCellValue('B' . $row, $this->kapasitas_model->mhs($angkatan));
+            $excel->setActiveSheetIndex(0)->setCellValue('C' . $row, $this->kapasitas_model->ambilMakulAngkatan($data['data'], $m['nama']));
+            $excel->setActiveSheetIndex(0)->setCellValue('D' . $row, $this->kapasitas_model->belumAmbilAngkatan($data['data'], $m['nama']));
 
-            $excel->getActiveSheet()->getStyle('A' . $numrow)->applyFromArray($style_col1);
-            $excel->getActiveSheet()->getStyle('B' . $numrow)->applyFromArray($style_col1);
-            $excel->getActiveSheet()->getStyle('C' . $numrow)->applyFromArray($style_col1);
-            $excel->getActiveSheet()->getStyle('D' . $numrow)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('A' . $row)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('B' . $row)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('C' . $row)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('D' . $row)->applyFromArray($style_col1);
             $numrow++;
         }
 

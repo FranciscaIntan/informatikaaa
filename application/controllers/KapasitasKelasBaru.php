@@ -38,156 +38,144 @@ class KapasitasKelasBaru extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
-    // public function editPresensi($idMakul) {
-    //     $this->session->set_tempdata('item', $idMakul);
-    //     redirect('presensi/editPresensi1');
-    // }
+    public function cetakAll() {
+        var_dump($this->session->tempdata('item1'));
+        $data = $this->session->tempdata('item1');
+        $data = (array) $data;
+        $excel = new PHPExcel();
+        // print $data['data'];die;
+        $excel->getProperties()->setTitle("Kapasitas Kelas Baru");
 
-    // public function editPresensi1() {
-    //     $idMakul = urldecode($this->session->tempdata('item'));
-    //     $data['mahasiswa'] = $this->PresensiModel->mahasiswaPresensi($idMakul);
-    //     $data['title'] = 'Edit Mata Kuliah';
-    //     $this->db->select('makul.* , ruangan.nama as ruangan');
-    //     $this->db->from('makul');
-    //     $this->db->join('ruangan','ruangan.makul = makul.idMakul');
-    //     $this->db->where('makul.idMakul', $idMakul);
-    //     $data['data'] = $this->db->get()->row_array();
+        $style_col = array(
+            'font' => array('bold' => true, 'name' => 'Times New Roman', 'size' => 12),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'borders' => array(
+                'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                'left' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+            )
+        );
 
-    //     // $this->form_validation->set_rules('tipe', 'Tipe', 'required');
-    //     $this->form_validation->set_rules('nama', 'Nama', 'required');
-    //     $this->form_validation->set_rules('tahun', 'Tahun', 'required');
-    //     $this->form_validation->set_rules('semester', 'Semester', 'required');
+        $style_row = array(
+            'alignment' => array(
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'borders' => array(
+                'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                'left' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+            )
+        );
+        $styleArray = array(
+            'font' => array(
+                'size' => 12,
+                'name' => 'Times New Roman'
+        ));
+        $style_col1 = array(
+            'font' => array('name' => 'Times New Roman'),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'borders' => array(
+                'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                'left' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+            )
+        );
 
-    //     if ($this->form_validation->run() == false) {
-    //         $this->load->view('templates/header', $data);
-    //         $this->load->view('templates/sidebar', $data);
-    //         $this->load->view('presensi/editPresensi', $data);
-    //         $this->load->view('templates/topbar', $data);
-    //         $this->load->view('templates/footer', $data);
-    //     } else {
-    //         $edit = [
-    //             'kodeMakul' => $this->input->post('kode'),
-    //             'tipeMakul' => $this->input->post('tipe'),
-    //             'nama' => $this->input->post('nama'),
-    //             'tahun' => $this->input->post('tahun'),
-    //             'semester' => $this->input->post('semester'),
-    //             'kapasitas' => $this->input->post('kapasitas')
-    //         ];
+        $excel->setActiveSheetIndex(0)->setCellValue('A1', "KAPASITAS KELAS BARU");
+        $excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(TRUE);
+        $excel->getActiveSheet()->getStyle('A1')->getFont()->setName('Times New Roman');
+        $excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(18);
+        $excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $excel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-    //         $this->db->where('idMakul', $idMakul);
-    //         $this->db->update('makul', $edit);
-    //         $this->session->set_flashdata('message', '<div class="alert alert-success" role="success">
-    //         Presensi berhasil di update!</div>');
-    //         redirect('presensi/isi/'.$idMakul);
-    //     }
-    // }
+        $excel->setActiveSheetIndex(0)->setCellValue('A3', "NO");
+        $excel->setActiveSheetIndex(0)->setCellValue('B3', "MATA KULIAH");
+        $excel->setActiveSheetIndex(0)->setCellValue('C3', "JUMLAH KAPASITAS");
+        $excel->setActiveSheetIndex(0)->setCellValue('D3', "BELUM MENGAMBIL");
+        $excel->setActiveSheetIndex(0)->setCellValue('E3', "MENGULANG");
+        $excel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+        $excel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $excel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+        $excel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
+        $excel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
+        $excel->getActiveSheet()->getStyle('A3')->applyFromArray($style_col1);
+        $excel->getActiveSheet()->getStyle('B3')->applyFromArray($style_col1);
+        $excel->getActiveSheet()->getStyle('C3')->applyFromArray($style_col1);
+        $excel->getActiveSheet()->getStyle('D3')->applyFromArray($style_col1);
+        $excel->getActiveSheet()->getStyle('E3')->applyFromArray($style_col1);
+        // $excel->setActiveSheetIndex(0)->setCellValue('A3', "MAHASISWA AKTIF PER ANGKATAN");
+        // $angkatan = $this->kapasitas_model->angkatan();
+        // $makul = $this->kapasitas_model->idMakul($data);
+        // $data = $this->session->userdata('matkul');
+        // $data['matkul'] = $this->session->userdata('matkul');
+        // $data['jumlahTotal'] = $this->session->userdata('jumlahTotal');
+        // $data['jumlahMengulang'] = $this->session->userdata('jumlahMengulang');
+        // $data['jumlahBelumMengambil'] = $this->session->userdata('jumlahBelumMengambil');
+        $menu = $this->db->query("SELECT DISTINCT m.nama FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul")->result_array();
+        
+        // $menu = $this->db->query("SELECT DISTINCT m.nama FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul". $data['data'])->result_array();
+        // $jumlahTotal = $this->db->query("SELECT DISTINCT p.nim FROM presensi p JOIN makul m ON p.idMakul=m.idMakul 
+        // WHERE m.nama LIKE '" . $menu['nama'] . "'");
+        // $this->db->distinct();
+        // SELECT m.nama, n.nilai FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul AND n.idMakul=33 
+        // $this->db->select('makul.nama, nilaiakhir.nilai, makul.idMakul');
+        // $this->db->from('nilaiakhir');
+        // $this->db->join('makul','nilaiakhir.idMakul = makul.idMakul');
+        // $col = 0;
+        $row = 4;
+        $i = 1;
+        foreach ($menu as $m) {
+        // for ($i = 0; $i < count($data); $i++) {
+            $excel->setActiveSheetIndex(0)->setCellValue('A' . $row, $i);
+            $excel->setActiveSheetIndex(0)->setCellValue('B'. $row, $m['nama']);
+            $excel->setActiveSheetIndex(0)->setCellValue('C'. $row, $this->session->userdata('jumlahTotal')[0]);
+            $excel->setActiveSheetIndex(0)->setCellValue('D'. $row, $this->session->userdata('jumlahMengulang'));
+            $excel->setActiveSheetIndex(0)->setCellValue('E'. $row, $this->session->userdata('jumlahBelumMengambil'));
 
-    // public function deletePresensi($idMakul)
-    // {
-    //     #delete presensi
-    //     $this->db->where('idMakul',$idMakul);
-    //     $this->db->delete('presensi');
-    //     #delete ruangan
-    //     $this->db->where('makul',$idMakul);
-    //     $this->db->delete('ruangan');
+            $excel->getActiveSheet()->getStyle('A' . $row)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('B' . $row)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('C' . $row)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('D' . $row)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('E' . $row)->applyFromArray($style_col1);
+            $i++;
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, ($i+1));
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $data[$i][0]);
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $data[$i][1]);
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $data[$i][2]);
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $data[$i][3]); 
+            
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $this->session->userdata('matkul'));
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $this->session->userdata('jumlahTotal'));
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $this->session->userdata('jumlahMengulang'));
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $this->session->userdata('jumlahBelumMengambil')); 
+            $row++;
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, '20' . $m['matkul']);
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, '20' . $m['jmlh']);
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, '20' . $m['hasil']);
+            // $excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, '20' . $m['jumlah']);
+        }
+        $excel->getActiveSheet()->mergeCellsByColumnAndRow(0, 1, 4, 1);
 
-    //     $hapus = array (
-    //         "idMakul" => $idMakul
-    //     );
-    //     $this->db->delete('makul', $hapus);
-    //     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="success">
-    //     Presensi berhasil di hapus!</div>');
-    //     redirect('presensi');
-    // }
+        $excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+        $excel->getActiveSheet()->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
 
+        $excel->getActiveSheet(0)->setTitle("Kapasitas Kelas Baru");
+        $excel->setActiveSheetIndex(0);
 
-    // public function upload() {
-    //     if (isset($_FILES["file"]["name"])) {
-    //         $countfiles = count($_FILES["file"]["name"]);
-
-    //         for ($iii = 0; $iii < $countfiles; $iii++) {
-
-    //             $path = $_FILES["file"]["tmp_name"][$iii];
-
-    //             $object = PHPExcel_IOFactory::load($path);
-    //             $hitung = 0;
-    //             foreach ($object->getWorksheetIterator() as $worksheet) {
-    //                 $highestRow = $worksheet->getHighestRow();
-    //                 $highestColumn = $worksheet->getHighestColumn();
-    //                 $makulkelas = $worksheet->getCellByColumnAndRow(3, 4);
-    //                 $makulkelas_temp = explode(" / ", $makulkelas);
-    //                 $tahun_ajar = $worksheet->getCellByColumnAndRow(1, 2);
-    //                 if (count(explode(" T.A ", $tahun_ajar)) == 2) {
-    //                     $tahun_ajar_temp = explode(" T.A ", $tahun_ajar);
-    //                 } else {
-    //                     $tahun_ajar_temp = explode(" TAHUN AKADEMIK ", $tahun_ajar);
-    //                 }
-
-    //                 $periode = $tahun_ajar_temp[1];
-
-    //                 $periode_temp = explode(" ", $periode);
-
-    //                 $waktu = $worksheet->getCellByColumnAndRow(18, 4);
-    //                 $waktu_temp = explode("/", $waktu);
-    //                 #Dosen                    
-    //                 $dosen = $worksheet->getCellByColumnAndRow(6, 4);
-
-    //                 #MAKUL
-    //                 #nama Makul
-    //                 $makul = $makulkelas_temp[0];
-    //                 #tahun Makul
-    //                 $tahun = $periode_temp[0];
-    //                 #semester Makul
-    //                 $semester = $periode_temp[3];
-    //                 #ruangan Makul
-    //                 $ruangan = $waktu_temp[2];
-    //                 #kelas Makul                                     
-    //                 $kelas = $makulkelas_temp[1];
-    //                 #hari Makul
-    //                 $hari = $waktu_temp[0];
-    //                 #jam Makul
-    //                 $jam = $waktu_temp[1];
-    //                 $check = ['nama' => $makul, 'tahun' => $tahun, 'semester' => $semester, 'kelas' => $kelas];
-
-    //                 $data1 = $this->PresensiModel->checkMakul($check);
-    //                 if ($data1 == 0) {
-    //                     $idMakul = $this->PresensiModel->idMakul($check);
-    //                     #idDosen
-    //                     $idDosen = $this->PresensiModel->idDosen($dosen);
-    //                     $ruang = ['nama' => $ruangan, 'makul' => $idMakul, 'hari' => $hari, 'jam' => $jam];
-    //                     $idRuangan = $this->PresensiModel->idRuangan($ruang);
-    //                     for ($row = 7; $row <= $highestRow; $row++) {
-    //                         $nim = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
-    //                         $nama = ucwords($worksheet->getCellByColumnAndRow(4, $row)->getValue());
-    //                         if (strlen($nim) == 9) {
-    //                             $this->PresensiModel->tahun($nim);
-    //                             $data[] = array('Nim' => $nim, 'Nama' => $nama, 'idMakul' => $idMakul, 'idDosen' => $idDosen, 'idRuangan' => $idRuangan);
-    //                             $hitung++;
-    //                         } elseif ($nama == $dosen) {
-    //                             $id = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
-    //                             if ($id == "") {
-    //                                 $id = mt_rand(0, 999999);
-    //                             }
-    //                             $this->db->set('npp', $id)->where('idDosen', $idDosen)->update('dosen');
-    //                         }
-    //                     }
-    //                     $this->PresensiModel->tambahKapasitas($idMakul, $hitung);
-    //                     $hitung = 0;
-    //                 } else {
-    //                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="danger">
-    //                     Data sudah di import!</div>');
-    //                 }
-    //             }
-    //         }
-
-    //         if ($data) {
-
-    //             $this->PresensiModel->insert($data);
-    //             $this->session->set_flashdata('message', '<div class="alert alert-success" role="success">
-    //                     Data berhasil di import!</div>');
-    //         }
-    //     }
-    //     redirect('presensi');
-    // }
-
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Kapasitas Kelas Baru.xlsx"');
+        header('Cache-Control: max-age=0');
+        $write = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $write->save('php://output');
+    }
+    
 }

@@ -45,7 +45,7 @@
                                     <a href="<?php echo base_url(); ?>KapasitasKelasBaru/isi/<?= $row['idMakul']; ?>"
                                         class=" badge badge-success text-center"> <i
 
-                                        
+
                                             class="glyphicon glyphicon-edit"></i>
                                         Detail</a>
                                 </td>
@@ -54,14 +54,20 @@
                             <?php endforeach; ?>
                         </tbody>
                     </table> 
+                    <?php $data = ['jumlahTotal'=>$jmlh,'jumlahMengulang'=>$jumlah, 'jumlahBelumMengambil'=> $hasil];
+                    // $this->session->set_userdata($data);
+                    $this->session->set_tempdata('item', $data);
+                    
+                    ?>
                     <hr>
-                                <a href="<?= base_url('kapasitas/cetakAll/') ?>" class="btn btn-success float-right">
+                                <a href="<?= base_url('KapasitasKelasBaru/cetakAll/') ?>" class="btn btn-success float-right">
                                     <i class="fas fa-file-excel" aria-hidden="true"></i> CETAK EXCEL</a>
                 </div>
             </div>
         </div>
     </main>
-
+        
+              
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
