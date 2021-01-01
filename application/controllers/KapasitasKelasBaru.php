@@ -134,12 +134,20 @@ class KapasitasKelasBaru extends CI_Controller {
         $row = 4;
         $i = 1;
         foreach ($menu as $m) {
-        // for ($i = 0; $i < count($data); $i++) {
+            $sql = "SELECT DISTINCT p.nim FROM presensi p JOIN makul m ON p.idMakul = m.idMakul WHERE m.nama LIKE '" .$m['nama']."'";
+            $jumlahNim =$this->db->query($sql)->num_rows();
+            $sql = "SELECT DISTINCT nim FROM mahasiswa WHERE status = 'AKTIF'";
+            $hasil = $this->db->query($sql)->num_rows()- $jumlahNim;
+            $sql = "SELECT COUNT( n.nilai) AS jumlah FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul AND n.nilai NOT LIKE 'A' AND n.nilai NOT LIKE 'B' AND m.nama LIKE '" . $m['nama'] . "' ";
+            $jumlah = $this->db->query($sql)->result_array();
+            $jmlh = abs($hasil) + abs($jumlah[0]['jumlah']);
+                                                    
+
             $excel->setActiveSheetIndex(0)->setCellValue('A' . $row, $i);
             $excel->setActiveSheetIndex(0)->setCellValue('B'. $row, $m['nama']);
-            $excel->setActiveSheetIndex(0)->setCellValue('C'. $row, $this->session->userdata('jumlahTotal')[0]);
-            $excel->setActiveSheetIndex(0)->setCellValue('D'. $row, $this->session->userdata('jumlahMengulang'));
-            $excel->setActiveSheetIndex(0)->setCellValue('E'. $row, $this->session->userdata('jumlahBelumMengambil'));
+            $excel->setActiveSheetIndex(0)->setCellValue('C'. $row, $jmlh);
+            $excel->setActiveSheetIndex(0)->setCellValue('D'. $row, abs($hasil));
+            $excel->setActiveSheetIndex(0)->setCellValue('E'. $row, $jumlah[0]['jumlah']);
 
             $excel->getActiveSheet()->getStyle('A' . $row)->applyFromArray($style_col1);
             $excel->getActiveSheet()->getStyle('B' . $row)->applyFromArray($style_col1);
@@ -147,21 +155,9 @@ class KapasitasKelasBaru extends CI_Controller {
             $excel->getActiveSheet()->getStyle('D' . $row)->applyFromArray($style_col1);
             $excel->getActiveSheet()->getStyle('E' . $row)->applyFromArray($style_col1);
             $i++;
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, ($i+1));
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $data[$i][0]);
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $data[$i][1]);
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $data[$i][2]);
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $data[$i][3]); 
             
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $this->session->userdata('matkul'));
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $this->session->userdata('jumlahTotal'));
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $this->session->userdata('jumlahMengulang'));
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $this->session->userdata('jumlahBelumMengambil')); 
             $row++;
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, '20' . $m['matkul']);
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, '20' . $m['jmlh']);
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, '20' . $m['hasil']);
-            // $excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, '20' . $m['jumlah']);
+            
         }
         $excel->getActiveSheet()->mergeCellsByColumnAndRow(0, 1, 4, 1);
 

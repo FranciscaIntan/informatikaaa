@@ -56,13 +56,14 @@
                                                     $jumlahNim = $this->db->query($sql)->num_rows();
                                                     
                                                     $sql = "SELECT DISTINCT nim FROM mahasiswa WHERE status = 'AKTIF'";
-                                                    $hasil = abs($this->db->query($sql)->result_array()) - $jumlahNim;
+                                                    $hasil = abs($this->db->query($sql)->num_rows()) - $jumlahNim;
                                                     echo abs($hasil);
                                                     ?>
                                                     </td>
                     <td class="text-center"><?php $sql = "SELECT n.nilai AS jumlah FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul AND n.nilai NOT LIKE 'A' AND n.nilai NOT LIKE 'B' AND m.nama LIKE '" .$makul->nama. "' ";
                                                     $jumlah = $this->db->query($sql)->num_rows();
-                                                    echo $jumlah[0]['jumlah'];
+                                                    // echo $jumlah[0]['jumlah'];
+                                                    echo $jumlah;
                                                     // $total += $jumlah[0]['jumlah'];
                                                     ?></td>
                     </tr>
