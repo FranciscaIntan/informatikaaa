@@ -107,8 +107,8 @@ class KapasitasKelasBaru extends CI_Controller
         $excel->setActiveSheetIndex(0)->setCellValue('A3', "NO");
         $excel->setActiveSheetIndex(0)->setCellValue('B3', "MATA KULIAH");
         $excel->setActiveSheetIndex(0)->setCellValue('C3', "JUMLAH KAPASITAS");
-        $excel->setActiveSheetIndex(0)->setCellValue('D3', "BELUM MENGAMBIL");
-        $excel->setActiveSheetIndex(0)->setCellValue('E3', "MENGULANG");
+        $excel->setActiveSheetIndex(0)->setCellValue('D3', "MENGULANG");
+        $excel->setActiveSheetIndex(0)->setCellValue('E3', "BELUM MENGAMBIL");
         $excel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
         $excel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
         $excel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
@@ -149,7 +149,7 @@ class KapasitasKelasBaru extends CI_Controller
             $jumlahNim = $this->db->query($sql)->num_rows();
 
             $sql = "SELECT DISTINCT nim FROM mahasiswa WHERE status = 'AKTIF'";
-            $hasil = abs($this->db->query($sql)->result_array()) - $jumlahNim;
+            $hasil = abs($this->db->query($sql)->num_rows()) - $jumlahNim;
             $sql = "SELECT COUNT( n.nilai) AS jumlah FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul AND n.nilai NOT LIKE 'A' AND n.nilai NOT LIKE 'B' AND m.nama LIKE '" . $m['nama'] . "' ";
             $jumlah = $this->db->query($sql)->result_array();
             $jmlh = abs($hasil) + abs($jumlah[0]['jumlah']);
