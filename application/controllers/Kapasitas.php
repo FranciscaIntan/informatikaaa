@@ -2,9 +2,11 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class kapasitas extends CI_Controller {
+class kapasitas extends CI_Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->library('pagination');
         $this->load->model('list_model');
@@ -12,7 +14,8 @@ class kapasitas extends CI_Controller {
         $this->load->library('excel');
     }
 
-    public function index() {
+    public function index()
+    {
         $data['title'] = 'Kapasitas Kelas';
         $data['makul'] = $this->kapasitas_model->makul();
 
@@ -24,7 +27,8 @@ class kapasitas extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
-    public function cari() {
+    public function cari()
+    {
         $makul = '';
         $statment = "";
         if ($this->input->post('angkatan') != "") {
@@ -81,7 +85,8 @@ class kapasitas extends CI_Controller {
         }
     }
 
-    function idSemester() {
+    function idSemester()
+    {
         $idSemester = $this->input->post('id');
         $data = $this->db->query("SELECT DISTINCT idSemester FROM makul WHERE nama = '$idSemester'")->result();
 
@@ -99,7 +104,8 @@ class kapasitas extends CI_Controller {
         }
     }
 
-    function tahun() {
+    function tahun()
+    {
         $tahun = $this->input->post('id');
         $data = $this->db->query("SELECT DISTINCT tahun FROM makul WHERE nama = '$tahun'")->result();
 
@@ -116,7 +122,8 @@ class kapasitas extends CI_Controller {
         }
     }
 
-    function semester() {
+    function semester()
+    {
         $semester = $this->input->post('id');
         $data = $this->db->query("SELECT DISTINCT semester FROM makul WHERE nama = '$semester'")->result();
 
@@ -133,7 +140,8 @@ class kapasitas extends CI_Controller {
         }
     }
 
-    function dosen() {
+    function dosen()
+    {
         $makul = $this->input->post('nama');
         $data = $this->db->query("SELECT DISTINCT c.nama  FROM presensi a JOIN makul b ON a.idMakul=b.idMakul JOIN dosen c ON a.idDosen=c.idDosen WHERE b.nama LIKE '$makul'")->result();
         $newdata = array();
@@ -149,7 +157,8 @@ class kapasitas extends CI_Controller {
         }
     }
 
-    function tipe() {
+    function tipe()
+    {
         $makul = $this->input->post('nama');
         $data = $this->db->query("SELECT DISTINCT b.tipeMakul FROM makul b WHERE b.nama LIKE  '$makul'")->result();
         $newdata = array();
@@ -165,7 +174,8 @@ class kapasitas extends CI_Controller {
         }
     }
 
-    public function cetak() {
+    public function cetak()
+    {
         $data = $this->session->tempdata('item');
         $data = (array) $data;
         $excel = new PHPExcel();
@@ -201,7 +211,8 @@ class kapasitas extends CI_Controller {
             'font' => array(
                 'size' => 12,
                 'name' => 'Times New Roman'
-        ));
+            )
+        );
         $style_col1 = array(
             'font' => array('name' => 'Times New Roman'),
             'alignment' => array(
@@ -321,7 +332,8 @@ class kapasitas extends CI_Controller {
         $write->save('php://output');
     }
 
-    public function cetakAngkatan() {
+    public function cetakAngkatan()
+    {
         $data = $this->session->tempdata('item1');
         $data = (array) $data;
         $excel = new PHPExcel();
@@ -357,7 +369,8 @@ class kapasitas extends CI_Controller {
             'font' => array(
                 'size' => 12,
                 'name' => 'Times New Roman'
-        ));
+            )
+        );
         $style_col1 = array(
             'font' => array('name' => 'Times New Roman'),
             'alignment' => array(
@@ -395,15 +408,15 @@ class kapasitas extends CI_Controller {
         $numrow = 4;
         foreach ($menu as $m) {
             # code...
-            $excel->setActiveSheetIndex(0)->setCellValue('A' . $numrow, $m['nama']);
-            $excel->setActiveSheetIndex(0)->setCellValue('B' . $numrow, $this->kapasitas_model->mhs($angkatan));
-            $excel->setActiveSheetIndex(0)->setCellValue('C' . $numrow, $this->kapasitas_model->ambilMakulAngkatan($data['data'], $m['nama']));
-            $excel->setActiveSheetIndex(0)->setCellValue('D' . $numrow, $this->kapasitas_model->belumAmbilAngkatan($data['data'], $m['nama']));
+            $excel->setActiveSheetIndex(0)->setCellValue('A' . $m, $m['nama']);
+            $excel->setActiveSheetIndex(0)->setCellValue('B' . $m, $this->kapasitas_model->mhs($angkatan));
+            $excel->setActiveSheetIndex(0)->setCellValue('C' . $m, $this->kapasitas_model->ambilMakulAngkatan($data['data'], $m['nama']));
+            $excel->setActiveSheetIndex(0)->setCellValue('D' . $m, $this->kapasitas_model->belumAmbilAngkatan($data['data'], $m['nama']));
 
-            $excel->getActiveSheet()->getStyle('A' . $numrow)->applyFromArray($style_col1);
-            $excel->getActiveSheet()->getStyle('B' . $numrow)->applyFromArray($style_col1);
-            $excel->getActiveSheet()->getStyle('C' . $numrow)->applyFromArray($style_col1);
-            $excel->getActiveSheet()->getStyle('D' . $numrow)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('A' . $m)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('B' . $m)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('C' . $m)->applyFromArray($style_col1);
+            $excel->getActiveSheet()->getStyle('D' . $m)->applyFromArray($style_col1);
             $numrow++;
         }
 
@@ -435,7 +448,8 @@ class kapasitas extends CI_Controller {
 
     //AND a.Nim LIKE '18%'
 
-    public function cetakAll() {
+    public function cetakAll()
+    {
 
         $excel = new PHPExcel();
         // print $data['data'];die;
@@ -470,7 +484,8 @@ class kapasitas extends CI_Controller {
             'font' => array(
                 'size' => 12,
                 'name' => 'Times New Roman'
-        ));
+            )
+        );
         $style_col1 = array(
             'font' => array('name' => 'Times New Roman'),
             'alignment' => array(
@@ -557,5 +572,4 @@ class kapasitas extends CI_Controller {
         $write = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
         $write->save('php://output');
     }
-
 }

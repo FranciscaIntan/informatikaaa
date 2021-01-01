@@ -33,6 +33,8 @@
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="<?= base_url('presensi'); ?>">Data Presensi Mahasiswa</a>
                             <a class="nav-link" href="<?= base_url('kapasitas'); ?>">Laporan Kapasitas Kelas</a>
+                            <a class="nav-link" href="<?= base_url('KapasitasKelasBaru'); ?>">Kapasitas Kelas Baru</a>
+                            <a class="nav-link" href="<?= base_url('nilaiakhir'); ?>">Data Nilai Akhir Mahasiswa</a>
                         </nav>
                     </div>
                     <a class="nav-link" href="#" data-toggle="collapse" data-target="#Rekomendasi" aria-expanded="false"
