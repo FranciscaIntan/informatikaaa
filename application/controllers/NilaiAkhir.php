@@ -2,10 +2,12 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class nilaiakhir extends CI_Controller {
-	 public function __construct() {
+class nilaiakhir extends CI_Controller
+{
+    public function __construct()
+    {
         parent::__construct();
-        
+
         $this->load->library('form_validation');
         //load libary pagination
         $this->load->library('pagination');
@@ -15,9 +17,10 @@ class nilaiakhir extends CI_Controller {
         $this->load->library('excel');
     }
 
-    
 
-    public function index() {
+
+    public function index()
+    {
         $data['data'] = $this->list_model->get_kelas_list();
         $data['title'] = 'Daftar Kelas';
         $this->load->view('templates/header', $data);
@@ -28,11 +31,14 @@ class nilaiakhir extends CI_Controller {
     }
 
     //parameter idmakul
-    public function isi($idmakul) {
-        $data['nilaiakhir'] = $this->NilaiAkhirModel->tampilIsi($idmakul);
+    public function isi($idmakul)
+    {
+
         $data['makul'] = $this->NilaiAkhirModel->cariMakul($idmakul);
         $data['mahasiswa'] = $this->NilaiAkhirModel->tampilIsi($idmakul);
         $data['datapresensi'] = $this->list_model->get_kelas_list();
+        // var_dump($data['nilaiakhir']->result_array());
+        // die;
         $data['title'] = 'Daftar Nilai Akhir';
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
@@ -41,16 +47,18 @@ class nilaiakhir extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
- 
-     public function editNilaiAkhir($idNilaiAkhir) {
+
+    public function editNilaiAkhir($idNilaiAkhir)
+    {
         $this->session->set_tempdata('item', $idNilaiAkhir);
         redirect('nilaiakhir/editNilaiMahasiswa');
     }
 
-    public function editNilaiMahasiswa() {
+    public function editNilaiMahasiswa()
+    {
         $idNilaiAkhir = urldecode($this->session->tempdata('item'));
         $data['mahasiswa'] = $this->NilaiAkhirModel->tampilIsi($idNilaiAkhir);
-        
+
         $data['title'] = 'Edit Nilai Mahasiswa';
 
         /*SELECT DISTINCT nilaiakhir.nim, nilaiakhir.nama, makul.nama, dosen.nama, nilaiakhir.nilai
@@ -62,8 +70,8 @@ class nilaiakhir extends CI_Controller {
 
         $this->db->select('nilaiakhir.*, makul.nama as namamakul, dosen.nama as namadosen');
         $this->db->from('nilaiakhir');
-        $this->db->join('makul','nilaiakhir.idMakul = makul.idMakul');
-        $this->db->join('dosen','nilaiakhir.idDosen = dosen.idDosen');
+        $this->db->join('makul', 'nilaiakhir.idMakul = makul.idMakul');
+        $this->db->join('dosen', 'nilaiakhir.idDosen = dosen.idDosen');
         $this->db->where('nilaiakhir.idNilaiAkhir', $idNilaiAkhir);
         $data['data'] = $this->db->get()->row_array();
 
@@ -79,16 +87,16 @@ class nilaiakhir extends CI_Controller {
             $this->load->view('templates/footer', $data);
         } else {
             $edit = [
-                
-               'nilai' => $this->input->post('nilai')
-                
+
+                'nilai' => $this->input->post('nilai')
+
             ];
-            
-                                    
+
+
             $this->db->where('idNilaiAkhir', $idNilaiAkhir);
             $this->db->update('nilaiakhir', $edit);
-            
-        
+
+
             $tmp = $data['data']['idMakul'];
 
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="success">
@@ -96,20 +104,18 @@ class nilaiakhir extends CI_Controller {
 
 
 
-        redirect('nilaiakhir/isi/'.$tmp);    
-            
+            redirect('nilaiakhir/isi/' . $tmp);
         }
-
     }
-  
+
     public function deleteDaftarNilai($idMakul)
     {
         #delete daftar nilai
-        $this->db->where('idMakul',$idMakul);
+        $this->db->where('idMakul', $idMakul);
         $this->db->delete('nilaiakhir');
-       
 
-        $hapus = array (
+
+        $hapus = array(
             "idMakul" => $idMakul
         );
         $this->db->delete('makul', $hapus);
@@ -118,7 +124,7 @@ class nilaiakhir extends CI_Controller {
         redirect('nilaiakhir');
     }
 
-/*  public function deleteDaftarNilai($idNilaiAkhir)
+    /*  public function deleteDaftarNilai($idNilaiAkhir)
     {
         #delete nilai akhir mhs
         $this->db->where('idNilaiAkhir',$idNilaiAkhir);
@@ -135,8 +141,9 @@ class nilaiakhir extends CI_Controller {
 
 
 
-    public function upload() {
-        
+    public function upload()
+    {
+
         if (isset($_FILES["file"]["name"])) {
             $countfiles = count($_FILES["file"]["name"]);
 
@@ -185,10 +192,9 @@ class nilaiakhir extends CI_Controller {
                     $jam = $waktu_temp[1];
                     $check = ['nama' => $makul, 'tahun' => $tahun, 'semester' => $semester, 'kelas' => $kelas];
                     $data1 = $this->NilaiAkhirModel->checkMakul($check);
-                    // var_dump($data1);
-                    // die;
+
                     if ($data1 == 0) {
-                        
+
                         $idMakul = $this->NilaiAkhirModel->idMakul($check);
                         #idDosen
                         $idDosen = $this->NilaiAkhirModel->idDosen($dosen);
@@ -200,7 +206,7 @@ class nilaiakhir extends CI_Controller {
                             $nilaiakhir = $worksheet->getCellByColumnAndRow(7, $row)->getValue();
                             if (strlen($nim) == 9) {
                                 $this->NilaiAkhirModel->tahun($nim);
-                                $data[] = array('Nim' => $nim, 'Nama' => $nama, 'idMakul' => $idMakul, 'idDosen' => $idDosen, 'Nilai' => $nilaiakhir);
+                                $data[] = array('nim' => $nim, 'nama' => $nama, 'idMakul' => $idMakul, 'idDosen' => $idDosen, 'nilai' => $nilaiakhir);
                                 $hitung++;
                             } elseif ($nama == $dosen) {
                                 $id = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
@@ -220,7 +226,8 @@ class nilaiakhir extends CI_Controller {
             }
 
             if ($data) {
-                
+                // var_dump($data);
+                // die;
                 $this->NilaiAkhirModel->insert($data);
                 $this->session->set_flashdata('message', '<div class="alert alert-success" role="success">
                         Data berhasil di import!</div>');
@@ -228,5 +235,4 @@ class nilaiakhir extends CI_Controller {
         }
         redirect('nilaiakhir');
     }
-
 }

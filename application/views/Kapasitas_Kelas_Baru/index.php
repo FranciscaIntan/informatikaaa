@@ -31,7 +31,6 @@
                                                     WHERE m.nama LIKE '" . $row['nama'] . "'";
 
                                         $jumlahNim = $this->db->query($sql)->num_rows();
-
                                         $sql = "SELECT DISTINCT nim FROM mahasiswa WHERE status = 'AKTIF'";
                                         $hasil = abs($this->db->query($sql)->result_array()) - $jumlahNim;
                                         $sql = "SELECT COUNT( n.nilai) AS jumlah FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul AND n.nilai NOT LIKE 'A' AND n.nilai NOT LIKE 'B' AND m.nama LIKE '" . $row['nama'] . "' ";

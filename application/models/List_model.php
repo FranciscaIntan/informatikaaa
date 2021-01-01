@@ -80,17 +80,9 @@ class List_model extends CI_Model
 
     function get_kapasitaskelas_list()
     {
-        // $this->db->order_by('idMatkul', 'ASC');
-        $this->db->distinct();
-        // SELECT m.nama, n.nilai FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul AND n.idMakul=33 
-        $this->db->select('makul.nama, nilaiakhir.nilai, makul.idMakul');
-        $this->db->from('nilaiakhir');
-        $this->db->join('makul', 'nilaiakhir.idMakul = makul.idMakul');
-        // $this->db->join('nilaiakhir','nilaiakhir.idNilaiAkhir = kapasitaskelas.idNilaiAkhir');
-        // $this->db->join('presensi','presensi.idPresensi = kapasitaskelas.idPresensi');
-        $data = $this->db->get();
-        var_dump($data->result_array());
-        die;
+
+        $sql = "SELECT DISTINCT m.nama, m.idMakul, m.kapasitas FROM nilaiakhir n JOIN makul m ON n.idMakul = m.idMakul";
+        $data = $this->db->query($sql);
         return $data;
     }
 }

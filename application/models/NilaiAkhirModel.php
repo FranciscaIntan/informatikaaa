@@ -1,19 +1,23 @@
 <?php
 
-class NilaiAkhirModel extends CI_Model {
+class NilaiAkhirModel extends CI_Model
+{
 
-    public function view() {
+    public function view()
+    {
         return $this->db->get('nilaiakhir')->result_array();
     }
 
-    public function idMakul($data) {
+    public function idMakul($data)
+    {
         $this->db->insert('makul', $data);
         $query = $this->db->select('idMakul')->from('makul')->where($data)->get();
         $row = $query->row();
         return $row->idMakul;
     }
 
-    public function idDosen($data) {
+    public function idDosen($data)
+    {
         if ($this->db->get_where('dosen', ['nama' => $data])->num_rows() == 0) {
             $this->db->insert('dosen', ['nama' => $data]);
             $query = $this->db->select('idDosen')->from('dosen')->where('nama', $data)->get();
@@ -26,27 +30,28 @@ class NilaiAkhirModel extends CI_Model {
         }
     }
 
-    public function insert($data) {
+    public function insert($data)
+    {
         $this->db->insert_batch('nilaiakhir', $data);
     }
 
-    public function insertMhs($data) {
+    public function insertMhs($data)
+    {
         $this->db->insert_batch('mahasiswa', $data);
     }
 
-   
+
     //get data mahasiswa berdasar makul from tabel nilaiakhir, return data
     public function tampilIsi($id)
     {
-        $this->db->distinct();
         $this->db->select('*');
         $this->db->from('nilaiakhir');
-        $this->db->where('idMakul',$id);
+        $this->db->where('idMakul', $id);
         $data = $this->db->get();
         return $data;
-
     }
-     public function idRuangan($data) {
+    public function idRuangan($data)
+    {
         if ($this->db->get_where('ruangan', ['nama' => $data['nama'], 'makul' => $data['makul']])->num_rows() == 0) {
             $this->db->insert('ruangan', $data);
             $query = $this->db->select('idRuangan')->from('ruangan')->where(['nama' => $data['nama'], 'makul' => $data['makul']])->get();
@@ -64,12 +69,13 @@ class NilaiAkhirModel extends CI_Model {
     public function cariMakul($id)
     {
         $this->db->from('makul');
-        $this->db->where('idMakul',$id);
+        $this->db->where('idMakul', $id);
         $data = $this->db->get();
         return $data->row();
     }
 
-    public function checkMakul($data) {
+    public function checkMakul($data)
+    {
         return $this->db->get_where('makul', ['nama' => $data['nama'], 'tahun' => $data['tahun'], 'semester' => $data['semester'], 'kelas' => $data['kelas']])->num_rows();
     }
 
@@ -79,25 +85,27 @@ class NilaiAkhirModel extends CI_Model {
         $this->db->distinct();
         $this->db->select('dosen.nama as dosen');
         $this->db->from('makul');
-        $this->db->join('presensi','presensi.idMakul = makul.idMakul');
-        $this->db->join('ruangan','ruangan.idRuangan = presensi.idRuangan');
-        $this->db->join('dosen','dosen.idDosen = presensi.idDosen' );
-        $this->db->where(' makul.idMakul',$id);
+        $this->db->join('presensi', 'presensi.idMakul = makul.idMakul');
+        $this->db->join('ruangan', 'ruangan.idRuangan = presensi.idRuangan');
+        $this->db->join('dosen', 'dosen.idDosen = presensi.idDosen');
+        $this->db->where(' makul.idMakul', $id);
         $data = $this->db->get()->row();
         return $data;
     }
 
     //by idnilaiakhir
-    public function getIdMakul($idn) {
+    public function getIdMakul($idn)
+    {
         $this->db->distinct();
         $this->db->select('nilaiakhir.idMakul');
         $this->db->from('nilaiakhir');
-        $this->db->where('idNilaiAkhir',$idn);
+        $this->db->where('idNilaiAkhir', $idn);
         $data = $this->db->get()->row_object();
         return $data;
     }
 
-    public function tahun($nim) {
+    public function tahun($nim)
+    {
         $th = str_split($nim);
         $data = $th[0] . $th[1];
         if ($this->db->get_where('tahun', ['tahun' => $data])->num_rows() == 0) {
@@ -105,11 +113,10 @@ class NilaiAkhirModel extends CI_Model {
             $this->db->insert('tahun');
         }
     }
-    
-    public function tambahKapasitas($id,$hitung)
+
+    public function tambahKapasitas($id, $hitung)
     {
         $this->db->where('idMakul', $id);
-        $this->db->update('makul', ['kapasitas'=>$hitung]);
+        $this->db->update('makul', ['kapasitas' => $hitung]);
     }
-
 }
