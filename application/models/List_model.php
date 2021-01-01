@@ -74,7 +74,7 @@ class List_model extends CI_Model {
        // $this->db->order_by('idMatkul', 'ASC');
         $this->db->distinct();
         // SELECT m.nama, n.nilai FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul AND n.idMakul=33 
-        $this->db->select('makul.nama, makul.idMakul');
+        $this->db->select('makul.nama, makul.idMakul, makul.kapasitas');
         // $this->db->select('makul.nama, nilaiakhir.nilai, makul.idMakul');
         $this->db->from('nilaiakhir');
         $this->db->join('makul','nilaiakhir.idMakul = makul.idMakul');

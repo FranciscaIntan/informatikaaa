@@ -27,18 +27,14 @@
                                 <td class="text-center"><?= $i ?></td>
                                 <td><?php echo $row['nama']; ?></td>
                                 <td class="text-center">
-                                   <?php 
-                                   $sql = "SELECT DISTINCT p.nim FROM presensi p JOIN makul m
+                                   <?php $sql = "SELECT DISTINCT p.nim FROM presensi p JOIN makul m ON p.idMakul=m.idMakul 
                                                     WHERE m.nama LIKE '" . $row['nama'] . "'";
-                                    // $sql = "SELECT DISTINCT p.nim FROM presensi p JOIN makul m ON p.idMakul=m.idMakul 
-                                    // WHERE m.nama LIKE '" . $row['nama'] . "'";
+                                                   
                                                     $jumlahNim = $this->db->query($sql)->num_rows();
                                                     
                                         $sql = "SELECT DISTINCT nim FROM mahasiswa WHERE status = 'AKTIF'";
-                                                    $hasil = abs($this->db->query($sql)->>num_rows()) - $jumlahNim;
-                                        $sql = "SELECT COUNT( n.nilai) AS jumlah FROM nilaiakhir n JOIN makul m WHERE n.nilai NOT LIKE 'A' AND n.nilai NOT LIKE 'B' AND m.nama LIKE '" . $row['nama'] . "' ";
-                                        // $sql = "SELECT COUNT( n.nilai) AS jumlah FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul AND n.nilai NOT LIKE 'A' AND n.nilai NOT LIKE 'B' AND m.nama LIKE '" . $row['nama'] . "' ";
-                                                    
+                                                    $hasil = abs($this->db->query($sql)->num_rows()) - $jumlahNim;
+                                        $sql = "SELECT COUNT( n.nilai) AS jumlah FROM nilaiakhir n JOIN makul m WHERE n.idMakul = m.idMakul AND n.nilai NOT LIKE 'A' AND n.nilai NOT LIKE 'B' AND m.nama LIKE '" . $row['nama'] . "' ";
                                                     $jumlah = $this->db->query($sql)->result_array();
                                                     $jmlh = abs($hasil) + abs($jumlah[0]['jumlah']);
                                                     
