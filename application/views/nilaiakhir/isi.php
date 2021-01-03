@@ -39,7 +39,7 @@
                                 <label for="title">DOSEN </label>
                             </div>
                             <div class="col">
-                                <label for="title">: <?= $this->NilaiAkhirModel->cariDosen($makul->idMakul)->dosen ?>
+                                <label for="title">: <?= $this->NilaiAkhirModel->cariDosenNew($makul->idMakul)->dosen ?>
                                 </label>
                             </div>
                         </div>

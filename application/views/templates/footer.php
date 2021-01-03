@@ -3,7 +3,7 @@
         <div class="d-flex align-items-center
                             justify-content-between small">
             <div class="text-muted">Copyright &copy; Atanasius Ivannoel Rio Aji, Hieronimus Fredy Morgan, Yudistira
-                Prama Putra, Edrick Hernando</div>
+                Prama Putra, Edrick Hernando, Francisca Intan Bertin, Devida Aurelia Yacob</div>
         </div>
     </div>
     </div>

@@ -93,6 +93,19 @@ class NilaiAkhirModel extends CI_Model
         return $data;
     }
 
+    public function cariDosenNew($id)
+    {
+        $this->db->order_by('makul.idMakul', 'ASC');
+        $this->db->distinct();
+        $this->db->select('dosen.nama as dosen');
+        $this->db->from('makul');
+        $this->db->join('nilaiakhir', 'nilaiakhir.idMakul = makul.idMakul');
+        // $this->db->join('ruangan', 'ruangan.idRuangan = nilaiakhir.idRuangan');
+        $this->db->join('dosen', 'dosen.idDosen = nilaiakhir.idDosen');
+        $this->db->where(' makul.idMakul', $id);
+        $data = $this->db->get()->row();
+        return $data;
+    }
     //by idnilaiakhir
     public function getIdMakul($idn)
     {

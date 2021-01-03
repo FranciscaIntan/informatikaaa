@@ -80,8 +80,8 @@ class List_model extends CI_Model
 
     function get_kapasitaskelas_list()
     {
-
-        $sql = "SELECT DISTINCT m.nama, m.idMakul, m.kapasitas FROM nilaiakhir n JOIN makul m ON n.idMakul = m.idMakul";
+        // $sql = "SELECT DISTINCT m.nama, m.idMakul, m.kapasitas FROM nilaiakhir n JOIN makul m ON n.nama = m.nama";
+        $sql = "SELECT DISTINCT m.nama, m.kapasitas FROM nilaiakhir n JOIN makul m ON n.idMakul = m.idMakul";
         $data = $this->db->query($sql);
         return $data;
     }
